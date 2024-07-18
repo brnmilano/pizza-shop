@@ -1,3 +1,4 @@
+import { Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
@@ -6,20 +7,31 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { SignInForm } from "@/models/signInValidationSchema";
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { signIn } from "@/api/sign-in";
 
 export default function SignIn() {
+  const [searchParams] = useSearchParams();
+
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { register, handleSubmit } = useForm<SignInForm>();
+  const { register, handleSubmit } = useForm<SignInForm>({
+    defaultValues: {
+      email: searchParams.get("email") ?? "",
+    },
+  });
+
+  const { mutateAsync: authenticate } = useMutation({
+    mutationFn: signIn,
+  });
 
   const handleSignIn = async (data: SignInForm) => {
+    const { email } = data;
+
     setLoading(true);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      console.log(data);
+      await authenticate({ email });
 
       toast.success("Enviamos um link de autenticação para o seu e-mail");
     } catch (error) {
@@ -52,7 +64,7 @@ export default function SignIn() {
             <h1 className="text-2xl font-semibold tracking-tight">
               Acessar painel
             </h1>
-            
+
             <p className="text-sm text-muted-foreground">
               Acompanhe suas vendas pelo painel do parceiro
             </p>

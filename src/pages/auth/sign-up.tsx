@@ -7,6 +7,8 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { SignUpForm } from "@/models/signUpValidationSchema";
 import { toast } from "sonner";
+import { useMutation } from "@tanstack/react-query";
+import { registerRestaurant } from "@/api/register-restaurant";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -15,11 +17,22 @@ export default function SignUp() {
 
   const { register, handleSubmit } = useForm<SignUpForm>();
 
+  const { mutateAsync: registerRestaurantFn } = useMutation({
+    mutationFn: registerRestaurant,
+  });
+
   const handleSignUp = async (data: SignUpForm) => {
+    const { restaurantName, managerName, email, phone } = data;
+
     setLoading(true);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await registerRestaurantFn({
+        restaurantName,
+        managerName,
+        email,
+        phone,
+      });
 
       console.log(data);
 
@@ -27,7 +40,7 @@ export default function SignUp() {
         action: {
           label: "Fazer Login",
           onClick: () => {
-            navigate("/sign-in");
+            navigate(`/sign-in?email=${email}`);
           },
         },
       });
