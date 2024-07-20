@@ -25,7 +25,6 @@ export default function AccountMenu() {
     useQuery({
       queryKey: ["meneged-restaurant"],
       queryFn: getManagerRestaurant,
-      staleTime: Infinity,
     });
 
   return (
