@@ -44,22 +44,35 @@ export default function StoreProfileDialog() {
     },
   });
 
+  function updateManageRestaurantCache({ name, description }: StoreProfile) {
+    const cached = queryClient.getQueryData<getManagerRestaurantResponse>([
+      "managed-restaurant",
+    ]);
+
+    if (cached) {
+      queryClient.setQueryData<getManagerRestaurantResponse>(
+        ["managed-restaurant"],
+        {
+          ...cached,
+          name,
+          description,
+        },
+      );
+    }
+
+    return { cached };
+  }
+
   const { mutateAsync: updateProfileFn } = useMutation({
     mutationFn: updateProfile,
-    onSuccess(_, { description, name }) {
-      const cached = queryClient.getQueryData<getManagerRestaurantResponse>([
-        "managed-restaurant",
-      ]);
+    onMutate({ description, name }) {
+      const { cached } = updateManageRestaurantCache({ name, description });
 
-      if (cached) {
-        queryClient.setQueryData<getManagerRestaurantResponse>(
-          ["managed-restaurant"],
-          {
-            ...cached,
-            name,
-            description,
-          },
-        );
+      return { previousProfile: cached };
+    },
+    onError(_errors, _variables, context) {
+      if (context?.previousProfile) {
+        updateManageRestaurantCache(context.previousProfile);
       }
     },
   });
