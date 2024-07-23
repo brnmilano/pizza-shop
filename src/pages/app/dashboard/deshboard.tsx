@@ -3,8 +3,8 @@ import MonthRevenueCard from "./month-revenue-card";
 import OrdersAmountCard from "./orders-amount-card";
 import DayOrdersAmountCard from "./day-orders-amount-card";
 import MonthCanceledOrdersAmountCard from "./month-orders-canceled-amount-card";
-import RevenueChart from "./revenue-chart";
 import PopularProductsChart from "./popular-products-chart";
+import { RevenueChart } from "./revenue-chart";
 
 export default function Dashboard() {
   return (
