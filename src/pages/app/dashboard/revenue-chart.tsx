@@ -55,14 +55,17 @@ export function RevenueChart() {
           <CardTitle className="text-base font-medium">
             Receita no período
           </CardTitle>
+
           <CardDescription>Receita diária no período</CardDescription>
         </div>
 
         <div className="flex items-center gap-3">
           <Label>Período</Label>
+
           <DateRangePicker date={dateRange} onDateChange={setDateRange} />
         </div>
       </CardHeader>
+
       <CardContent>
         {chartData ? (
           <ResponsiveContainer width="100%" height={240}>
@@ -81,6 +84,7 @@ export function RevenueChart() {
                 }
               />
               <CartesianGrid vertical={false} className="stroke-muted" />
+
               <Line
                 stroke={colors.violet[500]}
                 type="linear"
