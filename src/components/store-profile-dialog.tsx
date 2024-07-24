@@ -21,7 +21,7 @@ import {
   getManagerRestaurantResponse,
 } from "@/api/get-meneger-restaurant";
 import { useForm } from "react-hook-form";
-import { updateProfile } from "@/api/update-probile";
+import { updateProfile } from "@/api/update-profile";
 import { toast } from "sonner";
 
 export default function StoreProfileDialog() {
